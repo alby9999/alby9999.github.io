@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 9: Flask Web Application & Templates</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; background-color: #f4f4f9; }
+        h1, h2, h3 { color: #333; }
+        .lab-section { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .task-box { border-left: 5px solid #007bff; padding: 10px 15px; background-color: #e9f5ff; margin: 10px 0; border-radius: 0 4px 4px 0; }
+        .task-box h3 { margin-top: 0; color: #0056b3; }
+        .hint-box { border-left: 5px solid #ffc107; padding: 10px 15px; background-color: #fff9e6; margin: 10px 0; border-radius: 0 4px 4px 0; }
+        .hint-box strong { color: #856404; }
+        .file-box { border-left: 5px solid #28a745; padding: 10px 15px; background-color: #e9f7ec; margin: 10px 0; border-radius: 0 4px 4px 0; }
+        .file-box strong { color: #155724; }
+        code { background-color: #eee; padding: 2px 5px; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+        pre { background-color: #282c34; color: #abb2bf; padding: 15px; border-radius: 6px; overflow-x: auto; font-size: 0.9em; line-height: 1.5; }
+        pre .comment { color: #5c6370; font-style: italic; }
+        pre .keyword { color: #c678dd; }
+        pre .string { color: #98c379; }
+        pre .todo { color: #e5c07b; font-weight: bold; }
+        .structure { font-family: monospace; background: #f8f9fa; border: 1px solid #dee2e6; padding: 15px; border-radius: 6px; line-height: 1.8; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.8em; font-weight: bold; }
+        .badge-blue { background: #cce5ff; color: #004085; }
+        .badge-green { background: #d4edda; color: #155724; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+        th { background: #343a40; color: white; padding: 8px 12px; text-align: left; }
+        td { padding: 8px 12px; border-bottom: 1px solid #dee2e6; }
+        tr:nth-child(even) { background: #f8f9fa; }
+    </style>
+</head>
+<body>
+
+    <h1>Lab 9: Introduction to Flask &mdash; Routes &amp; Templates</h1>
+
+    <!-- ===== SETUP ===== -->
+    <div class="lab-section">
+        <h2>Setup: Project Structure &amp; Installation</h2>
+        <p>Before writing any code, set up your environment. Open a terminal in a new folder called <code>lab9/</code>.</p>
+
+        <div class="file-box">
+            <strong>Step 0 &mdash; Create &amp; Activate a Virtual Environment</strong>
+            <p style="margin: 8px 0 4px;">A virtual environment keeps your project's dependencies isolated from your system Python. Always create one before installing packages.</p>
+            <p style="margin: 4px 0 2px;"><strong style="color:#155724;">macOS / Linux:</strong></p>
+            <pre>python3 -m venv venv
+source venv/bin/activate</pre>
+            <p style="margin: 8px 0 2px;"><strong style="color:#155724;">Windows (Command Prompt):</strong></p>
+            <pre>python -m venv venv
+venv\Scripts\activate</pre>
+            <p style="margin: 8px 0 2px;"><strong style="color:#155724;">Windows (PowerShell):</strong></p>
+            <pre>python -m venv venv
+venv\Scripts\Activate.ps1</pre>
+            <p style="margin: 8px 0 0;">Once activated, your terminal prompt will show <code>(venv)</code> at the start. To deactivate later, run <code>deactivate</code>.</p>
+        </div>
+
+        <div class="file-box">
+            <strong>Step 1 &mdash; Install Flask</strong>
+            <pre>pip install flask</pre>
+        </div>
+
+        <div class="file-box">
+            <strong>Step 2 &mdash; Your project should have this structure by the end of the lab:</strong>
+            <div class="structure">
+lab9/<br>
+&nbsp;&nbsp;&nbsp;&nbsp;app.py<br>
+&nbsp;&nbsp;&nbsp;&nbsp;requirements.txt<br>
+&nbsp;&nbsp;&nbsp;&nbsp;templates/<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;base.html<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;index.html<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;about.html<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;post.html
+            </div>
+        </div>
+
+        <div class="file-box">
+            <strong>Step 3 &mdash; Save dependencies (run after installing Flask):</strong>
+            <pre>pip freeze > requirements.txt</pre>
+        </div>
+
+        <p>All starter files with <code># TODO</code> comments are provided in this lab folder. Open them in your code editor and follow each part below.</p>
+    </div>
+
+    <!-- ===== PART 1 ===== -->
+    <div class="lab-section">
+        <h2>Part 1: Your First Flask App &amp; Routes</h2>
+        <p>Flask maps URL paths to Python functions called <strong>view functions</strong> using the <code>@app.route()</code> decorator. Open <code>app.py</code>.</p>
+
+        <div class="task-box">
+            <h3>Task 1.1 &mdash; Create the Flask App Instance</h3>
+            <p>In <code>app.py</code>, complete the TODO to create a Flask application instance. This object is the core of your web app.</p>
+            <ol>
+                <li>Import <code>Flask</code>, <code>render_template</code>, and <code>abort</code> from the <code>flask</code> module.</li>
+                <li>Create a Flask app instance assigned to a variable named <code>app</code>. Pass <code>__name__</code> as the argument.</li>
+            </ol>
+            <div class="hint-box">
+                <strong>Hint:</strong> <code>app = Flask(__name__)</code> — <code>__name__</code> tells Flask where to find resources like the <code>templates/</code> folder.
+            </div>
+        </div>
+
+        <div class="task-box">
+            <h3>Task 1.2 &mdash; Define the Home Route</h3>
+            <p>A route connects a URL to a Python function. Complete the home route in <code>app.py</code>:</p>
+            <ol>
+                <li>Add the <code>@app.route('/')</code> decorator above the <code>index()</code> function.</li>
+                <li>For now, make the function <code>return</code> a plain string: <code>"Hello, Flask!"</code>.</li>
+                <li>Run the app: <code>python app.py</code> and visit <code>http://127.0.0.1:5000/</code> in your browser to confirm it works.</li>
+            </ol>
+        </div>
+
+        <div class="task-box">
+            <h3>Task 1.3 &mdash; Define the About Route</h3>
+            <p>Add a second route for the About page:</p>
+            <ol>
+                <li>Add the <code>@app.route('/about')</code> decorator above the <code>about()</code> function.</li>
+                <li>Return the string <code>"About this blog."</code> for now.</li>
+                <li>Visit <code>http://127.0.0.1:5000/about</code> to verify.</li>
+            </ol>
+        </div>
+
+        <p><strong>Key Concept &mdash; Flask Route Table:</strong></p>
+        <table>
+            <tr><th>URL</th><th>View Function</th><th>Returns</th></tr>
+            <tr><td><code>/</code></td><td><code>index()</code></td><td>Home page content</td></tr>
+            <tr><td><code>/about</code></td><td><code>about()</code></td><td>About page content</td></tr>
+            <tr><td><code>/post/&lt;int:post_id&gt;</code></td><td><code>post(post_id)</code></td><td>A single blog post</td></tr>
+        </table>
+    </div>
+
+    <!-- ===== PART 2 ===== -->
+    <div class="lab-section">
+        <h2>Part 2: Rendering HTML Templates</h2>
+        <p>Returning raw strings is impractical. Flask uses <strong>Jinja2</strong> to render HTML files from the <code>templates/</code> folder. The syntax <code>{{ variable }}</code> injects a Python value into HTML.</p>
+
+        <div class="task-box">
+            <h3>Task 2.1 &mdash; Render the Home Template</h3>
+            <p>Update the <code>index()</code> function in <code>app.py</code>:</p>
+            <ol>
+                <li>Replace the plain string return with <code>return render_template('index.html', ...)</code>.</li>
+                <li>Pass the <code>posts</code> list (already defined above the route) as a keyword argument: <code>posts=posts</code>.</li>
+                <li>Also pass <code>title="Home"</code>.</li>
+            </ol>
+        </div>
+
+        <div class="task-box">
+            <h3>Task 2.2 &mdash; Display the Post List in index.html</h3>
+            <p>Open <code>templates/index.html</code> and complete the Jinja2 template:</p>
+            <ol>
+                <li>Use <code>{{ title }}</code> to display the page title in the <code>&lt;h1&gt;</code> tag.</li>
+                <li>Use a Jinja2 <code>for</code> loop to iterate over <code>posts</code>:
+                    <pre>{&#37; for post in posts &#37;}
+  ...
+{&#37; endfor &#37;}</pre>
+                </li>
+                <li>Inside the loop, display each post's <code>id</code>, <code>title</code>, and <code>author</code> fields using <code>{{ }}</code> syntax.</li>
+                <li>Wrap each post in an <code>&lt;article&gt;</code> tag.</li>
+            </ol>
+            <div class="hint-box">
+                <strong>Hint:</strong> Access a dictionary key in a template with dot notation: <code>{{ post.title }}</code> or bracket notation: <code>{{ post['title'] }}</code>.
+            </div>
+        </div>
+
+        <div class="task-box">
+            <h3>Task 2.3 &mdash; Render the About Template</h3>
+            <p>Update the <code>about()</code> function in <code>app.py</code>:</p>
+            <ol>
+                <li>Use <code>render_template('about.html', title="About")</code>.</li>
+                <li>In <code>templates/about.html</code>, use <code>{{ title }}</code> in the heading and write a short description of the blog (any text you like).</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- ===== PART 3 ===== -->
+    <div class="lab-section">
+        <h2>Part 3: Template Inheritance </h2>
+        <p>Repeating the same <code>&lt;head&gt;</code>, nav bar, and footer in every template is messy. Flask/Jinja2 solves this with <strong>template inheritance</strong>: a base template defines the shared layout, and child templates fill in the specific content.</p>
+
+        <p><strong>Key syntax:</strong></p>
+        <table>
+            <tr><th>Tag</th><th>Where Used</th><th>Purpose</th></tr>
+            <tr><td><code>{&#37; block name &#37;}{&#37; endblock &#37;}</code></td><td>base.html</td><td>Declares a named placeholder</td></tr>
+            <tr><td><code>{&#37; extends "base.html" &#37;}</code></td><td>child templates</td><td>Inherit the base layout</td></tr>
+            <tr><td><code>{&#37; block name &#37;}...{&#37; endblock &#37;}</code></td><td>child templates</td><td>Override the placeholder with content</td></tr>
+        </table>
+
+        <div class="task-box">
+            <h3>Task 3.1 &mdash; Complete the Base Template</h3>
+            <p>Open <code>templates/base.html</code> and complete the TODOs:</p>
+            <ol>
+                <li>In the <code>&lt;title&gt;</code> tag, add a block called <code>title</code> with a default value of <code>Student Blog</code>.</li>
+                <li>In the <code>&lt;main&gt;</code> tag, add a block called <code>content</code> (leave it empty — child templates will fill it).</li>
+                <li>The nav bar links to <code>/</code> (Home) and <code>/about</code> (About) are already provided — review them.</li>
+            </ol>
+        </div>
+
+        <div class="task-box">
+            <h3>Task 3.2 &mdash; Extend the Base in index.html</h3>
+            <p>Update <code>templates/index.html</code> to use the base layout:</p>
+            <ol>
+                <li>Add <code>{&#37; extends "base.html" &#37;}</code> as the very first line.</li>
+                <li>Wrap your existing content inside <code>{&#37; block content &#37;} ... {&#37; endblock &#37;}</code>.</li>
+                <li>Add <code>{&#37; block title &#37;}Home &mdash; Student Blog{&#37; endblock &#37;}</code> to set the browser tab title.</li>
+                <li>Reload <code>http://127.0.0.1:5000/</code> — the nav bar from <code>base.html</code> should now appear.</li>
+            </ol>
+        </div>
+
+        <div class="task-box">
+            <h3>Task 3.3 &mdash; Extend the Base in about.html</h3>
+            <p>Apply the same inheritance pattern to <code>templates/about.html</code>:</p>
+            <ol>
+                <li>Add the <code>extends</code> tag at the top.</li>
+                <li>Wrap your about content in a <code>content</code> block.</li>
+                <li>Set a suitable browser title using the <code>title</code> block.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- ===== PART 4 ===== -->
+    <div class="lab-section">
+        <h2>Part 4: Dynamic Routes &amp; 404 Handling</h2>
+        <p>Dynamic routes let a single route handle many URLs by capturing a variable segment from the URL path. For example, <code>/post/3</code> and <code>/post/7</code> both match <code>/post/&lt;int:post_id&gt;</code>, passing <code>3</code> or <code>7</code> as the argument.</p>
+
+        <div class="task-box">
+            <h3>Task 4.1 &mdash; Define the Dynamic Post Route</h3>
+            <p>In <code>app.py</code>, complete the <code>post(post_id)</code> view function:</p>
+            <ol>
+                <li>Add the route decorator: <code>@app.route('/post/&lt;int:post_id&gt;')</code>.</li>
+                <li>Search the <code>posts</code> list for the post whose <code>'id'</code> matches <code>post_id</code>.</li>
+                <li>If no matching post is found, call <code>abort(404)</code> to return a 404 error.</li>
+                <li>If found, call <code>render_template('post.html', post=post, title=post['title'])</code>.</li>
+            </ol>
+            <div class="hint-box">
+                <strong>Hint:</strong> Use a Python <code>next()</code> with a generator expression to find the post:
+                <pre>post = next((p for p in posts if p['id'] == post_id), None)</pre>
+                If <code>post</code> is <code>None</code>, call <code>abort(404)</code>.
+            </div>
+        </div>
+
+        <div class="task-box">
+            <h3>Task 4.2 &mdash; Build the Post Template</h3>
+            <p>Open <code>templates/post.html</code> and complete the TODOs:</p>
+            <ol>
+                <li>Extend <code>base.html</code> and set the <code>title</code> block to display the post title.</li>
+                <li>In the <code>content</code> block, display:
+                    <ul>
+                        <li>The post <code>title</code> in an <code>&lt;h1&gt;</code>.</li>
+                        <li>The post <code>author</code> and <code>date</code> in a <code>&lt;p&gt;</code> tag.</li>
+                        <li>The post <code>body</code> in a <code>&lt;p&gt;</code> tag.</li>
+                        <li>A <code>&lt;a href="/"&gt;Back to Home&lt;/a&gt;</code> link.</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="task-box">
+            <h3>Task 4.3 &mdash; Link Posts from the Home Page</h3>
+            <p>Update <code>templates/index.html</code> so each post title is a clickable link:</p>
+            <ol>
+                <li>Wrap the post title in an anchor tag that links to <code>/post/{{ post.id }}</code>.</li>
+                <li>Use Flask's <code>url_for</code> function for best practice: <code>{{ url_for('post', post_id=post.id) }}</code>.</li>
+                <li>Add <code>url_for</code> to your import at the top of <code>app.py</code>.</li>
+                <li>Click a post title on the home page and confirm the post detail page loads correctly.</li>
+            </ol>
+            <div class="hint-box">
+                <strong>Why url_for?</strong> Hard-coded links like <code>/post/1</code> break if you change your route. <code>url_for('post', post_id=1)</code> always generates the correct URL from the function name, even if the route changes.
+            </div>
+        </div>
+
+        <div class="task-box">
+            <h3>Task 4.4 &mdash; Custom 404 Error Page</h3>
+            <p>Add a friendly error page when a post ID does not exist:</p>
+            <ol>
+                <li>In <code>app.py</code>, register a 404 error handler using the <code>@app.errorhandler(404)</code> decorator above a function called <code>not_found(error)</code>.</li>
+                <li>Inside the function, return <code>render_template('404.html'), 404</code>.</li>
+                <li>Create <code>templates/404.html</code> that extends <code>base.html</code> and displays a friendly "Page Not Found" message with a link back to home.</li>
+                <li>Test by visiting <code>http://127.0.0.1:5000/post/999</code> — you should see your custom page.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- ===== BONUS ===== -->
+    <div class="lab-section">
+        <h2>Bonus</h2>
+        <p>Extend the application with atleast one (or more) of the following:</p>
+        <ul>
+            <li><strong>Tag filter:</strong> Add a <code>tags</code> list to each post dict and create a route <code>/tag/&lt;tag_name&gt;</code> that shows all posts with that tag.</li>
+            <li><strong>Author page:</strong> Add a route <code>/author/&lt;string:name&gt;</code> that lists all posts by that author.</li>
+            <li><strong>Jinja2 filter:</strong> Use the built-in <code>| upper</code> filter to display author names in uppercase in the templates.</li>
+            <li><strong>Conditional rendering:</strong> In <code>index.html</code>, use <code>{&#37; if posts &#37;}...{&#37; else &#37;}No posts yet.{&#37; endif &#37;}</code> to handle an empty post list gracefully.</li>
+        </ul>
+    </div>
+
+    <!-- ===== REFERENCE ===== -->
+    <div class="lab-section">
+        <h2>Quick Reference</h2>
+        <table>
+            <tr><th>Flask Concept</th><th>Syntax</th></tr>
+            <tr><td>Create app</td><td><code>app = Flask(__name__)</code></td></tr>
+            <tr><td>Define a route</td><td><code>@app.route('/path')</code></td></tr>
+            <tr><td>Dynamic segment</td><td><code>@app.route('/item/&lt;int:id&gt;')</code></td></tr>
+            <tr><td>Render a template</td><td><code>render_template('file.html', key=value)</code></td></tr>
+            <tr><td>Return 404</td><td><code>abort(404)</code></td></tr>
+            <tr><td>Error handler</td><td><code>@app.errorhandler(404)</code></td></tr>
+            <tr><td>Generate URL</td><td><code>url_for('view_function', param=val)</code></td></tr>
+            <tr><td>Jinja2 variable</td><td><code>{{ variable }}</code></td></tr>
+            <tr><td>Jinja2 for loop</td><td><code>{&#37; for x in list &#37;} ... {&#37; endfor &#37;}</code></td></tr>
+            <tr><td>Jinja2 if</td><td><code>{&#37; if condition &#37;} ... {&#37; endif &#37;}</code></td></tr>
+            <tr><td>Inherit layout</td><td><code>{&#37; extends "base.html" &#37;}</code></td></tr>
+            <tr><td>Define block</td><td><code>{&#37; block name &#37;}{&#37; endblock &#37;}</code></td></tr>
+        </table>
+        <p><strong>Docs:</strong> <a href="https://flask.palletsprojects.com/en/3.0.x/quickstart/" target="_blank">flask.palletsprojects.com</a> &nbsp;|&nbsp; <a href="https://jinja.palletsprojects.com/en/3.1.x/templates/" target="_blank">Jinja2 Template Docs</a></p>
+    </div>
+
+</body>
+</html>
